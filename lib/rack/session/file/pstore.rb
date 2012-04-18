@@ -49,7 +49,11 @@ module Rack
           private
 
           def store_for_sid(sid)
-            ::PStore.new(session_file_name(sid), want_thread_safe?)
+            begin
+              ::PStore.new(session_file_name(sid), want_thread_safe?)
+            rescue ArgumentError
+              ::PStore.new(session_file_name(sid))
+            end
           end
 
           def session_file_name(sid)

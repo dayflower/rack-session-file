@@ -3,7 +3,7 @@
 module Rack
   module Session
     module File
-      VERSION = '0.2.0'
+      VERSION = '0.3.0'
 
       autoload :Marshal, 'rack/session/file/marshal'
       autoload :PStore, 'rack/session/file/pstore'
@@ -17,7 +17,7 @@ module Rack
         }
 
         driver = options.delete(:driver) || :pstore
-        driver = mapping[driver.downcase] || driver if driver.is_a?(Symbol)
+        driver = mapping[driver.to_s.downcase.to_sym] || driver if driver.is_a?(Symbol)
         if ! driver.is_a?(Class)
           require autoload?(driver) if autoload?(driver)
           driver = const_get(driver)

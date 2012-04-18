@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/rack-session-file', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["ITO Nobuaki"]
@@ -32,7 +31,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "rack-session-file"
   gem.require_paths = ["lib"]
-  gem.version       = Rack::Session::File::VERSION
+  gem.version       = '0.3.0'
 
   if gem.respond_to? :specification_version then
     gem.specification_version = 3
