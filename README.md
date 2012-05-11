@@ -6,8 +6,10 @@ Rack session store on plain file system.
 
 Add this line to your application's Gemfile:
 
-    gem 'rack-session-file', :git =>
-      'git://github.com/dayflower/rack-session-file.git'
+```ruby
+gem 'rack-session-file', :git =>
+  'git://github.com/dayflower/rack-session-file.git'
+```
 
 And then execute:
 
@@ -15,8 +17,10 @@ And then execute:
 
 ## Usage
 
-    use Rack::Session::File, :storage => ENV['TEMP'],
-                             :expire_after => 1800
+```ruby
+use Rack::Session::File, :storage => ENV['TEMP'],
+                         :expire_after => 1800
+```
 
 ### Options
 
@@ -28,7 +32,9 @@ Default is `Dir.tmpdir`.
 
 You can specify backend serializer via `:driver` option.
 
-    use Rack::Session::File, :driver => :YAML
+```ruby
+use Rack::Session::File, :driver => :YAML
+```
 
 Bundled drivers are:
 
@@ -38,7 +44,9 @@ Bundled drivers are:
 
 Also you can `use` backend driver class explicitly.
 
-    use Rack::Session::File::YAML
+```ruby
+use Rack::Session::File::YAML
+```
 
 ## Contributing
 
