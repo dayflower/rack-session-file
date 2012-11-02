@@ -37,10 +37,14 @@ module Rack
             ensure_storage_accessible()
 
             data = {}
-            store_for_sid(sid).transaction(true) do |db|
-              db.roots.each do |key|
-                data[key] = db[key]
+            begin
+              store_for_sid(sid).transaction(true) do |db|
+                db.roots.each do |key|
+                  data[key] = db[key]
+                end
               end
+            rescue Psych::SyntaxError, Syck::Error, Syck::TypeError
+              return nil
             end
             return data
           end

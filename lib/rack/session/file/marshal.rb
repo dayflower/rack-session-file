@@ -25,7 +25,9 @@ module Rack
               end
             rescue Errno::ENOENT
               return nil
-          end
+            rescue TypeError
+              return nil
+            end
           end
 
           def delete_session(sid)
