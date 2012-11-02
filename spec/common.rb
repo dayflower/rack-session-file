@@ -74,6 +74,19 @@ shared_examples_for Rack::Session::File do
     cookie.should_not match(/#{bad_cookie}/)
   end
 
+  it 'survives broken session data' do
+    open(::File.join(@storage, 'broken'), 'w') do |f|
+      f.write "\x1\x1o"     # broken data for Marshal, YAML
+    end
+    cookie = 'rack.session=broken'
+    res = Rack::MockRequest.new(pool) \
+            .get('/', 'HTTP_COOKIE' => cookie)
+
+    res.body.should == '{"counter"=>1}'
+    cookie = res['Set-Cookie'][@session_match]
+    cookie.should_not match(/broken/)
+  end
+
   it 'should maintain freshness' do
     pool2 = described_class.new(@increment_mockapp, :storage => @storage, :expire_after => 2)
     expired_time = Time.now + 5
