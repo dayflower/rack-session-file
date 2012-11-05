@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
     "README.md",
     "Rakefile",
     "lib/rack-session-file.rb",
+    "lib/rails-session-file.rb",
     "lib/rack/session/file.rb",
     "lib/rack/session/file/abstract.rb",
     "lib/rack/session/file/marshal.rb",
@@ -31,7 +32,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "rack-session-file"
   gem.require_paths = ["lib"]
-  gem.version       = '0.3.0'
+  gem.version       = '0.4.0'
 
   if gem.respond_to? :specification_version then
     gem.specification_version = 3

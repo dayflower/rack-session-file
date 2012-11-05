@@ -2,24 +2,34 @@
 
 Rack session store on plain file system.
 
-## Installation
+## Usage in Rack Applications
 
-Add this line to your application's Gemfile:
+On Gemfile:
 
 ```ruby
-gem 'rack-session-file', :git =>
-  'git://github.com/dayflower/rack-session-file.git'
+gem 'rack-session-file'
 ```
 
-And then execute:
-
-    $ bundle install
-
-## Usage
+And use `Rack::Session::File` as Rack Middleware:
 
 ```ruby
 use Rack::Session::File, :storage => ENV['TEMP'],
                          :expire_after => 1800
+```
+
+## Usage in Rails 3 Applications
+
+On Gemfile:
+
+```ruby
+gem 'rack-session-file', :require => 'rails-session-file'
+```
+
+And modify your config/initializers/session_store.rb to something like:
+
+```ruby
+FooBar::Application.config.session_store :file_store,
+  :key => '_foobar_session', :driver => 'YAML'
 ```
 
 ### Options
