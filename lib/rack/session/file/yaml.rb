@@ -1,24 +1,13 @@
 # coding: utf-8
 require 'rubygems'
 require 'fileutils'
-
+require 'yaml/store'
 require File.expand_path(File.dirname(__FILE__) + '/abstract')
 
 module Rack
   module Session
     module File
       class YAML < Abstract
-        begin
-          require 'psych'
-          YAML_ERROR_CLASSES = [ ::Psych::SyntaxError ]
-        rescue ::LoadError
-          begin
-            require 'syck'
-            YAML_ERROR_CLASSES = [ ::Syck::Error, ::Syck::TypeError ]
-          rescue ::LoadError
-          end
-        end
-        require 'yaml/store'
 
         def initialize(app, options = {})
           super
@@ -55,7 +44,7 @@ module Rack
                   data[key] = db[key]
                 end
               end
-            rescue *YAML_ERROR_CLASSES
+            rescue (::Psych::SyntaxError rescue nil), (::Syck::Error rescue nil), (::Syck::TypeError rescue nil)
               return nil
             end
             return data
