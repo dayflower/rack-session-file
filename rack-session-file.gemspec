@@ -32,7 +32,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "rack-session-file"
   gem.require_paths = ["lib"]
-  gem.version       = '0.4.0'
+  gem.version       = '0.5.0'
 
   if gem.respond_to? :specification_version then
     gem.specification_version = 3

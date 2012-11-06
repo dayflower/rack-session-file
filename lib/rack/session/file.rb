@@ -3,7 +3,7 @@
 module Rack
   module Session
     module File
-      VERSION = '0.4.0'
+      VERSION = '0.5.0'
 
       autoload :Marshal, 'rack/session/file/marshal'
       autoload :PStore, 'rack/session/file/pstore'
