@@ -65,26 +65,26 @@ shared_examples_for Rack::Session::File do
   end
 
   it 'survives nonexistent cookies' do
-    bad_cookie = 'rack.session=blarghfasel'
+    bad_cookie = 'rack.session=00000001'
     res = Rack::MockRequest.new(pool) \
             .get('/', 'HTTP_COOKIE' => bad_cookie)
 
     res.body.should == '{"counter"=>1}'
     cookie = res['Set-Cookie'][@session_match]
-    cookie.should_not match(/#{bad_cookie}/)
+    cookie.should_not match(/#{bad_cookie}(?:;|$)/)
   end
 
   it 'survives broken session data' do
-    open(::File.join(@storage, 'broken'), 'w') do |f|
-      f.write "\x1\x1o"     # broken data for Marshal, YAML
+    open(::File.join(@storage, '00000002'), 'w') do |f|
+      f.write "\x1\x1o"     # broken data for Marshal and YAML
     end
-    cookie = 'rack.session=broken'
+    bad_cookie = 'rack.session=00000002'
     res = Rack::MockRequest.new(pool) \
-            .get('/', 'HTTP_COOKIE' => cookie)
+            .get('/', 'HTTP_COOKIE' => bad_cookie)
 
     res.body.should == '{"counter"=>1}'
     cookie = res['Set-Cookie'][@session_match]
-    cookie.should_not match(/broken/)
+    cookie.should_not match(/#{bad_cookie}(?:;|$)/)
   end
 
   it 'should maintain freshness' do
@@ -172,6 +172,16 @@ shared_examples_for Rack::Session::File do
     res3 = req.get('/', 'HTTP_COOKIE' => cookie)
 #   res3['Set-Cookie'][@session_match].should == session
     res3.body.should == '{"counter"=>4}'
+  end
+
+  it 'omit cookie with bad session id' do
+    bad_cookie = 'rack.session=/etc/passwd'
+    res = Rack::MockRequest.new(pool) \
+            .get('/', 'HTTP_COOKIE' => bad_cookie)
+
+    res.body.should == '{"counter"=>1}'
+    cookie = res['Set-Cookie'][@session_match]
+    cookie.should_not match(/#{bad_cookie}(?:;|$)/)
   end
 end
 

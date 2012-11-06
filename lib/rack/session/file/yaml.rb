@@ -44,6 +44,8 @@ module Rack
                   data[key] = db[key]
                 end
               end
+            rescue InvalidSessionIDError
+              return nil
             rescue (::Psych::SyntaxError rescue nil), (::Syck::Error rescue nil), (::Syck::TypeError rescue nil)
               return nil
             end
@@ -51,9 +53,12 @@ module Rack
           end
 
           def delete_session(sid)
-            filename = store_for_sid(sid).path
-            if ::File.exists?(filename)
-              ::File.unlink(filename)
+            begin
+              filename = store_for_sid(sid).path
+              if ::File.exists?(filename)
+                ::File.unlink(filename)
+              end
+            rescue InvalidSessionIDError
             end
           end
 
@@ -68,6 +73,7 @@ module Rack
           end
 
           def session_file_name(sid)
+            ensure_sid_is_valid(sid)
             return ::File.join(@storage, sid)
           end
 

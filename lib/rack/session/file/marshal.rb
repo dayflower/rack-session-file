@@ -23,6 +23,8 @@ module Rack
               open_session_file(sid, 'r') do |file|
                 return ::Marshal.load(file)
               end
+            rescue InvalidSessionIDError
+              return nil
             rescue Errno::ENOENT
               return nil
             rescue TypeError
@@ -31,9 +33,12 @@ module Rack
           end
 
           def delete_session(sid)
-            filename = session_file_name(sid)
-            if ::File.exists?(filename)
-              ::File.unlink(filename)
+            begin
+              filename = session_file_name(sid)
+              if ::File.exists?(filename)
+                ::File.unlink(filename)
+              end
+            rescue InvalidSessionIDError
             end
           end
 
@@ -55,6 +60,7 @@ module Rack
           end
 
           def session_file_name(sid)
+            ensure_sid_is_valid(sid)
             return ::File.join(@storage, sid)
           end
 

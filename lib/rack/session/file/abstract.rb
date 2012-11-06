@@ -5,6 +5,8 @@ require 'rack/session/abstract/id'
 module Rack
   module Session
     module File
+      class InvalidSessionIDError < SecurityError; end
+
       class Abstract < Rack::Session::Abstract::ID
         DEFAULT_OPTIONS = Rack::Session::Abstract::ID::DEFAULT_OPTIONS.merge({
           :storage             => Dir.tmpdir,
@@ -160,6 +162,14 @@ module Rack
 
           def want_thread_safe?
             @env['rack.multithread']
+          end
+
+          def ensure_sid_is_valid(sid)
+            unless /^[0-9A-Fa-f]+$/ =~ sid
+              raise InvalidSessionIDError.new("'#{sid}' is not suitable for session ID")
+            end
+
+            true
           end
         end
       end
