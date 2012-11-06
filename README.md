@@ -17,6 +17,12 @@ use Rack::Session::File, :storage => ENV['TEMP'],
                          :expire_after => 1800
 ```
 
+**NOTICE**: Never use this module in conjunction with other session middlewares (especially `Rack::Session::Cookie`).  That would brake session handling.
+
+### For Sinatra and Padrino
+
+Do not enable session mechanism by `enable :session`.  Built-in session of Sinatra (and Padrino) utilizes `Rack::Session::Cookie`, so it will interfere this module's behavior.  Using this middleware makes `session[]` available in your application without `enable :session`.
+
 ## Usage in Rails 3 Applications
 
 On Gemfile:
